@@ -19,10 +19,14 @@ namespace DentistManagementSystem
 
             //initalizes the staff classes
             Admin Admin = new Admin("George", "Admin", "admin");
-            List<Receptionist> receptionists = new List<Receptionist> { new Receptionist("Jane", "JaneDoe", "Rec1"), new Receptionist("phillip", "phillipson", "rec2") };
-            List<Nurse> Nurses = new List<Nurse> { new Nurse("jenny", "Jenny", "nurse1"), new Nurse("nurse2", "n2", "Nurse2")};
-            List<Dentist> Dentists = new List<Dentist> { new Dentist("bill", "bill", "Dentist1"), new Dentist("jill", "jill", "Dentist2") };
-            bool DataToggle = true;
+            List<Receptionist> receptionists = new List<Receptionist> { new Receptionist("Jane", "JaneDoe", "Rec1"), new Receptionist("Janed", "JaneDoed", "Rec1d"), new Receptionist("Receptionist 3", "Receptionist 3", "Receptionist 3") };
+            List<Nurse> Nurses = new List<Nurse> { new Nurse("jenny", "Jenny", "nurse1"), new Nurse("Nurse2", "Nurse2", "Nurse2"), new Nurse("Nurse3", "Nurse3", "Nurse3") };
+            List<Dentist> Dentists = new List<Dentist> { new Dentist("bill", "bill", "Dentist1"), new Dentist("billy", "Dentist2", "Dentist2"), };
+            List<DentalPractice> Practices = new List<DentalPractice> { new DentalPractice(true,"Taunton Dentist",0,receptionists[0])};
+            receptionists[0].isassined = true;
+            Practices[0].pracRooms.Add(new Room(0,true,true,Nurses[0],Dentists[0]));
+            Nurses[0].hasroom = true;
+            Dentists[0].hasroom = true;
 
             //Merges The Staff Data Into one list
             List<string> Names = new List<string>();
@@ -60,258 +64,202 @@ namespace DentistManagementSystem
                 username.Add(receptionists[x].User);
                 staffid.Add(receptionists[x].staffID);
             }
-            
-            
 
-            void LogIn() //logs a user in
+
+
+
+
+            void SurMenu() 
             {
-                int isuserright = 0;//show if user is wrong
-                int ispassright = 0;// show if pass is wrong
-                int FIsAdmin = 0;//check if user is an admin in the while loop
-                LogCur = 0;
-                user = "";
-                int curStaffid = 0;
-
-                while (LogMax > LogCur) //while within the ammount of attemts allowed
+                Console.Clear();
+                Console.WriteLine("Choose a practice");
+                Console.WriteLine();
+                string userchoice = null;
+                DentalPractice ChosenPractice = null;//chosen dental practice
+                for (int x = 0; x < Practices.Count; x++)
                 {
-
-                    //for user
-                    LogCur++;//add one to log current
-                    LogCD--;// add one to log count down
-                    Console.Clear();
-                    Console.WriteLine("please enter your username and password:");
-                    Console.WriteLine();
-                    Console.WriteLine("Username:");
-                    string Username = Console.ReadLine();//user input = Username
-                    Console.WriteLine("Password:");
-                    string Password = Console.ReadLine();//user input = password
-                    Console.WriteLine();
-                    
-
-
-                    for (int x = 0; x < username.Count; x++)
-                    {
-                        //if the details where right
-
-                        if (username[x] == Username) // if userinput = username add 1 to is right
-                        {
-                            user = Username;//checks which user is logging in
-                            curStaffid = staffid[x];//saves there id
-                            ispassright++;
-                            if (password[x] == Password)// if userinput = password add 1 to is right
-                            {
-                                ispassright++;
-                                if (ispassright == 2) //if isright equals 2 login
-                                {
-
-                                    LogCur = 4;
-                                    
-
-                                }
-
-                            }
-
-                        }
-                        if (password[x] == Password) // if password is right
-                        {
-
-                            isuserright++;
-                            if (username[x] == Username) // if uname is right
-                            {
-                                isuserright++;
-                                if (isuserright == 2) // log in
-                                {
-                                    LogCur = 4;
-                                }
-
-                            }
-
-                        }
-                    }
-
-                    //what do do if details are wrong
-                    if (isuserright == 1) // if username show user error and the attempts they have left
-                    {
-                        Console.WriteLine("You have entered your Username wrong");
-                        if (LogCD > 1)
-                        {
-                            Console.WriteLine("remaining Attempts: {0}", LogCD);
-                        }
-                        Console.WriteLine();
-                        Console.ReadLine();
-                    }
-                    else if (ispassright == 1) // if password is wrong show error
-                    {
-                        Console.WriteLine("you have entered your Password wrong");
-                        if (LogCD > 0)
-                        {
-                            Console.WriteLine("remaining Attempts: {0}", LogCD);
-                        }
-                        Console.WriteLine();
-                        Console.WriteLine();
-                        Console.ReadLine();
-                    }
-                    else if (ispassright == 0)// if both are wrong show wrong
-                    {
-                        Console.WriteLine("you entered both your password and Username wrong");
-                        if (LogCD > 0)
-                        {
-                            Console.WriteLine("remaining Attempts: {0}", LogCD);
-                        }
-                        Console.WriteLine();
-                        Console.ReadLine();
-                    }
-
-
-
+                    Console.WriteLine("{0}.{1}", x, Practices[x].Name);
+                    userchoice = x.ToString();
                 }
-
-
-                if (LogCur == 4)
+                Console.WriteLine();
+                //user selects what they are going to do
+                Console.WriteLine("1: to select dentist");
+                Console.WriteLine("2: to add dentist");
+                Console.WriteLine("3: Employee Management");
+                string userinput = Console.ReadLine();
+                if (userinput == "1") 
                 {
-                    
-                    int admin = 0;
-                    int rec = 1;
-                    int dentist = 2;
-                    int nurse = 3;
-
-                    if (curStaffid == admin) 
-                    {
-                        
-                        HiAdmin();
-                    }
-
-                    if (curStaffid == rec)
-                    {
-                        Console.Clear();
-                        Console.WriteLine("hi Receptionist");
-                    }
-
-                    if (curStaffid == dentist)
-                    {
-                        Console.Clear();
-                        Console.WriteLine("hi Receptionist");
-                    }
-
-                    if (curStaffid == nurse)
-                    {
-                        Console.Clear();
-                        Console.WriteLine("hi Receptionist");
-                    }
-
+                    SelectDentist();
+                }
+                if (userinput == "2")
+                {
+                    AddDentist();
+                }
+                if (userinput == "3")
+                {
+                    HiAdmin();
                 }
                 
-
-                else if (LogCur == LogMax) //tells the user they are out of attempts
+                void AddDentist() 
                 {
-                    Console.WriteLine("You are out of attempts restart or get a admin to log in to unlock you...");
-                    Console.WriteLine("To login as admin type: 1");
-                    Console.WriteLine("Exit: Enter");
-                    string Userinput = Console.ReadLine();
-                    if (Userinput == "1") //if user input equals 1 log in as only admin
+                    //user input that creates a new name and id for the new surgery
+                    Console.Clear();
+                    Console.WriteLine("enter the name of the new dentist:");
+                    string newName = Console.ReadLine();
+                    int newsurID = Practices.Count;//the new Surgery id
+                    int x; 
+                    int y = 0;
+
+                    //Displays the available Receptionists
+                    Console.WriteLine("assign a Receptionist:");
+                    for (x = 0 ; x < receptionists.Count; x++)
                     {
-                        isuserright = 0;//show if user is wrong
-                        ispassright = 0;// show if pass is wrong
-                        LogCur = 0;
-                        user = "";
-                        // same as the previous login method but it only works for the admin
-                        while (LogMax > LogCur) //while within the ammount of attemts allowed
-                        {
 
-                            //for user
-                            LogCur++;//add one to log current
-                            LogCD--;// add one to log count down
-                            Console.Clear();
-                            Console.WriteLine("To log in as admin please enter your username and password:");
-                            Console.WriteLine();
-                            Console.WriteLine("Username:");
-                            string Username = Console.ReadLine();//user input = Username
-                            Console.WriteLine("Password:");
-                            string Password = Console.ReadLine();//user input = password
-                            Console.WriteLine();
-
-
-
-                            for (int x = 0; x < username.Count; x++)
-                            {
-                                //if the details where right
-
-                                if (username[0] == Username) // if userinput = username add 1 to is right
-                                {
-                                    user = Username;//checks which user is logged in
-                                    ispassright++;
-                                    if (password[0] == Password)// if userinput = password add 1 to is right
-                                    {
-                                        ispassright++;
-                                        if (ispassright == 2) //if isright equals 2 login
-                                        {
-
-                                            LogCur = 4;
-                                            
-
-                                        }
-
-                                    }
-
-                                }
-                                if (password[0] == Password) // if password is right
-                                {
-
-                                    isuserright++;
-                                    if (username[0] == Username) // if uname is right
-                                    {
-                                        isuserright++;
-                                        if (isuserright == 2) // log in
-                                        {
-                                            LogCur = 4;
-                                        }
-
-                                    }
-
-                                }
-                            }
-
-                            //what do do if details are wrong
-                            if (isuserright == 1) // if username show user error and the attempts they have left
-                            {
-                                Console.WriteLine("You have entered your Username wrong");
-                                Console.WriteLine();
-                                Console.ReadLine();
-                            }
-                            else if (ispassright == 1) // if password is wrong show error
-                            {
-                                Console.WriteLine("you have entered your Password wrong");
-                                Console.WriteLine();
-                                Console.WriteLine();
-                                Console.ReadLine();
-                            }
-                            else if (ispassright == 0)// if both are wrong show wrong
-                            {
-                                Console.WriteLine("you entered both your password and Username wrong");
-                                Console.WriteLine();
-                                Console.ReadLine();
-                            }
-
-
-
-                        }// same as the previous login method
-
-
-                        if (LogCur == 4)
-                        {
-                            int admin = 0;
-
-                            if (curStaffid == admin) {
-                                Console.WriteLine("Hi Admin");
-                            }
-
+                        if (receptionists[x].isassined == false) { 
+                            Console.WriteLine("{0}.{1}", x, receptionists[x].Name);
                             
+                        }
+                    }
+                    
+                    // Creates the new Surgery.
+                    Console.WriteLine();
+                    Console.WriteLine("which dentist will be assined:");
+                    string AssinedDent = Console.ReadLine();
+                    
+                    for (x = 0; x < receptionists.Count; x++)
+                    {
+                        if (x.ToString() == AssinedDent) 
+                        {
+                            Practices.Add(new DentalPractice(true, newName,newsurID, receptionists[x]));
+                            receptionists[x].isassined = true;
+                        }
+                    }
+                    SurMenu();
+                };//Add a Dentist Surgery
+                void SelectDentist() 
+                {
+                    //user selects a practice to find more details.
+                    Console.Clear();
+                    Console.WriteLine("Choose a practice");
+                    Console.WriteLine();
+                    for (int x = 0; x < Practices.Count; x++)
+                    {
+                        Console.WriteLine("{0}.{1}", x, Practices[x].Name);
+                        userchoice = x.ToString();
+                    }
+                    Console.WriteLine("select the practice");
+
+                    //finds the selected practice on the users input.
+                    string Userinput = Console.ReadLine();
+                    Console.Clear();
+                    for(int X = 0; X < Practices.Count; X++) 
+                    {
+                        if (Userinput == userchoice) 
+                        {
+                            ChosenPractice = Practices[X];
+                        }
+                    }
+                    if (Userinput == userchoice)
+                    {
+                        selectedDentist();
+                    }
+                };//selecting a dentist
+                void selectedDentist() 
+                {
+                    int x = 0;
+                    int Chosenroom;
+
+                    //displays all of the rooms in the practice
+                    Console.WriteLine("Receptionist:{0}",ChosenPractice.AssinedRec.Name);
+                    for (x = 0; x < ChosenPractice.pracRooms.Count; x++)
+                    {
+                        Console.WriteLine("Room: {0} /// Dentist: {1} /// Nurse: {2}", x, ChosenPractice.pracRooms[x].assineddent.Name, ChosenPractice.pracRooms[x].assinednur.Name);
+                        
+                    }
+
+                    //user choses to add a room
+                    Console.WriteLine();
+                    Console.WriteLine("1: to add Room");
+                    string Userchoice = Console.ReadLine();
+                    if (Userchoice == "1")
+                    {
+                        CreateRoom();
+                    }
+
+                    void CreateRoom() {
+
+                        
+                        //variables 
+                        Console.Clear();
+                        int newID = ChosenPractice.pracRooms.Count;//new id
+                        Nurse assinednur = null;//selected nurse
+                        Dentist assineddentist = null;//selected dentist
+
+                        //displays available dentists
+                        Console.WriteLine("Available Dentists:");
+
+                        for (x = 0; x < Dentists.Count; x++) 
+                        {
+                            if (Dentists[x].hasroom == false) 
+                            {
+                                Console.WriteLine("{0}. Name: {1}",x,Dentists[x].Name);
+                            }
+                        }
+
+                        //sets the new dentist and marks the person as assined
+                        string AssinedDent = Console.ReadLine();
+
+                        for (x = 0; x < Dentists.Count; x++)
+                        {
+                            if (x.ToString() == AssinedDent)
+                            {
+                                Dentists[x].hasroom = true;
+                                assineddentist = Dentists[x];
+
+                            }
+                        }
+
+                        //displays available nurses
+                        Console.Clear();
+                        Console.WriteLine("Available Nurses:");
+                        for (x = 0; x < Nurses.Count; x++)
+                        {
+                            if (Nurses[x].hasroom == false)
+                            {
+                                Console.WriteLine("{0}. Name: {1}", x, Nurses[x].Name);
+                            }
 
                         }
 
-                    }
-                }
+                        //sets the new Marks and marks the person as assined
+                        string Assinednur = Console.ReadLine();
 
+                        for (x = 0; x < Nurses.Count; x++)
+                        {
+                            if (x.ToString() == Assinednur)
+                            {
+                                Nurses[x].hasroom = true;
+                                assinednur = Nurses[x];
+                            }
+                        }
+
+                        //creates the new room
+                        for (x = 0; x < Practices.Count; x++)
+                        {
+                            if (ChosenPractice.Name == Practices[x].Name)
+                            {
+                                Practices[x].pracRooms.Add(new Room(newID, true, true, assinednur, assineddentist));
+                            }
+                        }
+                        Console.Clear();
+                        SurMenu(); 
+
+
+
+                    }//create room
+
+                    SurMenu();
+                }//what to do when a Dentist is selected
                 void HiAdmin() //what admins see's
                 {
                     void ChangeDetails()//change users details
@@ -583,7 +531,7 @@ namespace DentistManagementSystem
                     }
                     void UserMenu()
                     {
-                        
+
                         Console.Clear();//clears console
                         for (int x = 0; x < username.Count; x++)
                         {
@@ -619,7 +567,7 @@ namespace DentistManagementSystem
 
                         Mainmenu();
                     }
-                    void Mainmenu() 
+                    void Mainmenu()
                     {
                         Console.Clear();//clears console
                         if (userlock == false)//if normal login
@@ -645,7 +593,7 @@ namespace DentistManagementSystem
                             {
                                 UserMenu();
                             }
-                            
+
                         }
                         else if (userlock == true) //not a full login the user cannot see the other logins while the admin is loging in
                         {
@@ -665,7 +613,260 @@ namespace DentistManagementSystem
 
                     Mainmenu();
 
+                }//employee Management System
+
+            }
+            void LogIn() //logs a user in
+            {
+                int isuserright = 0;//show if user is wrong
+                int ispassright = 0;// show if pass is wrong
+                int FIsAdmin = 0;//check if user is an admin in the while loop
+                LogCur = 0;
+                user = "";
+                int curStaffid = 0;
+
+                
+                while (LogMax > LogCur) //while within the ammount of attemts allowed
+                {
+
+                    //for user
+                    LogCur++;//add one to log current
+                    LogCD--;// add one to log count down
+                    Console.Clear();
+                    Console.WriteLine("please enter your username and password:");
+                    Console.WriteLine();
+                    Console.WriteLine("Username:");
+                    string Username = Console.ReadLine();//user input = Username
+                    Console.WriteLine("Password:");
+                    string Password = Console.ReadLine();//user input = password
+                    Console.WriteLine();
+                    
+
+
+                    for (int x = 0; x < username.Count; x++)
+                    {
+                        //if the details where right
+
+                        if (username[x] == Username) // if userinput = username add 1 to is right
+                        {
+                            user = Username;//checks which user is logging in
+                            curStaffid = staffid[x];//saves there id
+                            ispassright++;
+                            if (password[x] == Password)// if userinput = password add 1 to is right
+                            {
+                                ispassright++;
+                                if (ispassright == 2) //if isright equals 2 login
+                                {
+
+                                    LogCur = 4;
+                                    
+
+                                }
+
+                            }
+
+                        }
+                        if (password[x] == Password) // if password is right
+                        {
+
+                            isuserright++;
+                            if (username[x] == Username) // if uname is right
+                            {
+                                isuserright++;
+                                if (isuserright == 2) // log in
+                                {
+                                    LogCur = 4;
+                                }
+
+                            }
+
+                        }
+                    }
+
+                    //what do do if details are wrong
+                    if (isuserright == 1) // if username show user error and the attempts they have left
+                    {
+                        Console.WriteLine("You have entered your Username wrong");
+                        if (LogCD > 1)
+                        {
+                            Console.WriteLine("remaining Attempts: {0}", LogCD);
+                        }
+                        Console.WriteLine();
+                        Console.ReadLine();
+                    }
+                    else if (ispassright == 1) // if password is wrong show error
+                    {
+                        Console.WriteLine("you have entered your Password wrong");
+                        if (LogCD > 0)
+                        {
+                            Console.WriteLine("remaining Attempts: {0}", LogCD);
+                        }
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        Console.ReadLine();
+                    }
+                    else if (ispassright == 0)// if both are wrong show wrong
+                    {
+                        Console.WriteLine("you entered both your password and Username wrong");
+                        if (LogCD > 0)
+                        {
+                            Console.WriteLine("remaining Attempts: {0}", LogCD);
+                        }
+                        Console.WriteLine();
+                        Console.ReadLine();
+                    }
+
+
+
                 }
+
+
+                if (LogCur == 4)
+                {
+                    
+                    int admin = 0;
+                    int rec = 1;
+                    int dentist = 2;
+                    int nurse = 3;
+
+                    if (curStaffid == admin) 
+                    {
+                        
+                        HiAdmin();
+                    }
+
+                    if (curStaffid == rec)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("hi Receptionist");
+                    }
+
+                    if (curStaffid == dentist)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("hi Receptionist");
+                    }
+
+                    if (curStaffid == nurse)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("hi Receptionist");
+                    }
+
+                }
+                
+
+                else if (LogCur == LogMax) //tells the user they are out of attempts
+                {
+                    Console.WriteLine("You are out of attempts restart or get a admin to log in to unlock you...");
+                    Console.WriteLine("To login as admin type: 1");
+                    Console.WriteLine("Exit: Enter");
+                    string Userinput = Console.ReadLine();
+                    if (Userinput == "1") //if user input equals 1 log in as only admin
+                    {
+                        isuserright = 0;//show if user is wrong
+                        ispassright = 0;// show if pass is wrong
+                        LogCur = 0;
+                        user = "";
+                        // same as the previous login method but it only works for the admin
+                        while (LogMax > LogCur) //while within the ammount of attemts allowed
+                        {
+
+                            //for user
+                            LogCur++;//add one to log current
+                            LogCD--;// add one to log count down
+                            Console.Clear();
+                            Console.WriteLine("To log in as admin please enter your username and password:");
+                            Console.WriteLine();
+                            Console.WriteLine("Username:");
+                            string Username = Console.ReadLine();//user input = Username
+                            Console.WriteLine("Password:");
+                            string Password = Console.ReadLine();//user input = password
+                            Console.WriteLine();
+
+
+
+                            for (int x = 0; x < username.Count; x++)
+                            {
+                                //if the details where right
+
+                                if (username[0] == Username) // if userinput = username add 1 to is right
+                                {
+                                    user = Username;//checks which user is logged in
+                                    ispassright++;
+                                    if (password[0] == Password)// if userinput = password add 1 to is right
+                                    {
+                                        ispassright++;
+                                        if (ispassright == 2) //if isright equals 2 login
+                                        {
+
+                                            LogCur = 4;
+                                            
+
+                                        }
+
+                                    }
+
+                                }
+                                if (password[0] == Password) // if password is right
+                                {
+
+                                    isuserright++;
+                                    if (username[0] == Username) // if uname is right
+                                    {
+                                        isuserright++;
+                                        if (isuserright == 2) // log in
+                                        {
+                                            LogCur = 4;
+                                        }
+
+                                    }
+
+                                }
+                            }
+
+                            //what do do if details are wrong
+                            if (isuserright == 1) // if username show user error and the attempts they have left
+                            {
+                                Console.WriteLine("You have entered your Username wrong");
+                                Console.WriteLine();
+                                Console.ReadLine();
+                            }
+                            else if (ispassright == 1) // if password is wrong show error
+                            {
+                                Console.WriteLine("you have entered your Password wrong");
+                                Console.WriteLine();
+                                Console.WriteLine();
+                                Console.ReadLine();
+                            }
+                            else if (ispassright == 0)// if both are wrong show wrong
+                            {
+                                Console.WriteLine("you entered both your password and Username wrong");
+                                Console.WriteLine();
+                                Console.ReadLine();
+                            }
+
+
+
+                        }// same as the previous login method
+
+
+                        if (LogCur == 4)
+                        {
+                            int admin = 0;
+
+                            if (curStaffid == admin) {
+                                Console.WriteLine("Hi Admin");
+                            }
+
+                            
+
+                        }
+
+                    }
+                }
+
+                
 
                 void HiUser()//#What users see when they log in
                 {
@@ -684,9 +885,10 @@ namespace DentistManagementSystem
 
                 }
             }
-            LogIn();
 
-            
+            SurMenu();
+
+
 
 
 
