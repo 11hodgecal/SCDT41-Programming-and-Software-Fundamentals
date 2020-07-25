@@ -21,13 +21,14 @@ namespace DentistManagementSystem
             List<Dentist> Dentists = new List<Dentist> { new Dentist("bill", "bill", "Dentist1"), new Dentist("billy", "Dentist2", "Dentist2"), };
             List<DentalPractice> Practices = new List<DentalPractice> { new DentalPractice(true,"Taunton Dentist",0,receptionists[0])};
             List<Patient> Patient = new List<Patient> { new Patient ("pat1",1341341,"pat1@gmail.com",true,true,Dentists[0],0,"4 pat rd") };
+            //testing vars
             Dentists[0].roomid = 0;
             receptionists[0].PracID = 0;
             receptionists[0].isassined = true;
             Practices[0].pracRooms.Add(new Room(0,true,true,Nurses[0],Dentists[0]));
             Nurses[0].hasroom = true;
             Dentists[0].hasroom = true;
-
+            Patient[0].PatientAppointments.Add(new Appointment("Checkup", 22.70,Dentists[0],Practices[0].pracRooms[0]));
             //Merges The Staff Data Into one list
             List<string> Names = new List<string>();
             List<string> username = new List<string>();
@@ -796,13 +797,13 @@ namespace DentistManagementSystem
                     if (curStaffid == dentist)
                     {
                         Console.Clear();
-                        Console.WriteLine("hi Receptionist");
+                        nurdocLogin();
                     }
 
                     if (curStaffid == nurse)
                     {
                         Console.Clear();
-                        Console.WriteLine("hi Receptionist");
+                        nurdocLogin();
                     }
 
                 }
@@ -831,7 +832,113 @@ namespace DentistManagementSystem
             }
             void nurdocLogin()
             {
+                void ManagePatientMenu()
+                {
+                    for (int y = 0; y < receptionists.Count; y++)
+                    {
+                        if (user == receptionists[y].User)
+                        {
+                            if (receptionists[y].isassined == true)
+                            {
+                                //displays the choices and the patients
+                                Console.WriteLine("Patients:");
+                                for (int x = 0; x < Patient.Count; x++)
+                                {
+                                    Console.WriteLine("num: {0}//Name:{1}///Number: {2}///Email: {3}//Adress {4}// Dentist Name: {5}", x, Patient[x].Name1, Patient[x].Number, Patient[x].Email1, Patient[x].Address1, Patient[x].Dentist1.Name);
+                                }
+                                Console.WriteLine("1. select patient");
 
+                                //user choice
+                                string X = Console.ReadLine();
+
+                                if (X == "1")
+                                {
+                                    ViewPatient();
+                                }
+                                
+
+                            }
+                            else
+                            {
+                                // if the receptionist is not assined no patients can be a assined to them
+                                Console.WriteLine("you are not assined yet Please try again later");
+                                Console.ReadLine();
+                                user = null;
+                                LogIn();
+                            }
+                        }
+                    }
+                    LogIn();
+
+                }
+                void ViewPatient()
+                {
+                    Console.Clear();
+                    string selected = null;
+                    //displays all the available Patients
+                    for (int x = 0; x < Patient.Count; x++)
+                    {
+                        for (int y = 0; y < Dentists.Count; y++)
+                        {
+                            if (Patient[x].Dentist1 == Dentists[y])
+                            {
+                                Console.WriteLine("/// ID:{0} ///Name: {1}// Email: {2}// Phone: {3}// Address{4}", x, Patient[x].Name1, Patient[x].Email1, Patient[x].Number, Patient[x].Address1);
+
+                            }
+                        }
+                    }
+
+                    Console.WriteLine("select the id of the Patient to select:");
+                    string chosenpatient = Console.ReadLine();//user choses a patient
+
+                    for (int x = 0; x < Patient.Count; x++)
+                    {
+                        for (int y = 0; y < Dentists.Count; y++)
+                        {
+                            if (Patient[x].Dentist1 == Dentists[y])
+                            {
+                                //sets the selected patients name as selected and then uses the view appointments function
+                                selected = Patient[int.Parse(chosenpatient)].Name1;
+                                ViewAppointments();
+                            }
+                        }
+                    }
+
+                    void ViewAppointments()
+                    {
+                        //displays all appointments for the selected patient
+                        Console.Clear();
+                        for (int x = 0; x < Patient.Count; x++)
+                        {
+                            if (selected == Patient[x].Name1)
+                            {
+                                Console.WriteLine("appointments for {0}:", selected);
+                                for (int r = 0; r < Patient[x].PatientAppointments.Count; r++)
+                                {
+                                    Console.WriteLine("id:{0} /// Appointment for a {1} /// Costs: £{2} // with {3} // In room {4}", r, Patient[x].PatientAppointments[r].Treatment1, Patient[x].PatientAppointments[r].Price, Patient[x].PatientAppointments[r].dentist.Name, Patient[x].PatientAppointments[r].room.roomid);
+
+                                }
+                            }
+                        }
+                        // lets the user Decide whether they want to make a appointment or cancel an Existing one
+                        Console.WriteLine("To make a new appointment type 1:");
+                        Console.WriteLine("To Cancel An existing appointment type 2:");
+                        string UserChoice = Console.ReadLine();
+
+                        if (UserChoice == "1")
+                        {
+                            //MakeAppointment();
+                        }
+                        if (UserChoice == "2")
+                        {
+                            //Cancel();
+                        }
+                        ManagePatientMenu();
+                    }
+                    
+                    
+                    LogIn();
+                }
             }
             void reclogin() {
                 string X = null;
@@ -890,20 +997,210 @@ namespace DentistManagementSystem
                             }
                         }
                     }
+                    LogIn();
 
                 }
                 void ViewPatient()
                 {
+                    Console.Clear();
+                    string selected = null;
+                    //displays all the available Patients
+                    for (int x = 0; x < Patient.Count; x++)
+                    {
+                        for (int y = 0; y < Dentists.Count; y++)
+                        {
+                            if (Patient[x].Dentist1 == Dentists[y])
+                            {
+                                Console.WriteLine("/// ID:{0} ///Name: {1}// Email: {2}// Phone: {3}// Address{4}", x, Patient[x].Name1, Patient[x].Email1, Patient[x].Number, Patient[x].Address1);
+                                
+                            }
+                        }
+                    }
+
+                    Console.WriteLine("select the id of the Patient to select:");
+                    string chosenpatient = Console.ReadLine();//user choses a patient
+
+                    for (int x = 0; x < Patient.Count; x++)
+                    {
+                        for (int y = 0; y < Dentists.Count; y++)
+                        {
+                            if (Patient[x].Dentist1 == Dentists[y])
+                            {
+                                //sets the selected patients name as selected and then uses the view appointments function
+                                selected = Patient[int.Parse(chosenpatient)].Name1;
+                                ViewAppointments();
+                            }
+                        }
+                    }
+
                     void ViewAppointments()
                     {
+                        //displays all appointments for the selected patient
+                        Console.Clear();
+                        for (int x = 0; x < Patient.Count; x++)
+                        {
+                            if (selected == Patient[x].Name1) 
+                            {
+                                Console.WriteLine("appointments for {0}:", selected);
+                                for (int r = 0; r < Patient[x].PatientAppointments.Count; r++) 
+                                {
+                                    Console.WriteLine("id:{0} /// Appointment for a {1} /// Costs: £{2} // with {3} // In room {4}", r, Patient[x].PatientAppointments[r].Treatment1, Patient[x].PatientAppointments[r].Price, Patient[x].PatientAppointments[r].dentist.Name, Patient[x].PatientAppointments[r].room.roomid);
+                                
+                                }
+                            }
+                        }
+                        // lets the user Decide whether they want to make a appointment or cancel an Existing one
+                        Console.WriteLine("To make a new appointment type 1:");
+                        Console.WriteLine("To Cancel An existing appointment type 2:");
+                        string UserChoice = Console.ReadLine();
 
+                        if (UserChoice == "1") 
+                        {
+                            MakeAppointment();
+                        }
+                        if (UserChoice == "2") 
+                        {
+                            Cancel();
+                        }
+                        ManagePatientMenu();
                     }
                     void MakeAppointment()
                     {
+                        //all of the Required variables to make the instance
+                        string NewTreatment;
+                        double Band1 = 22.70;
+                        double Band2 = 62.10;
+                        double Band3 = 269.30;
+                        double ChosenBand = 0;
+                        Dentist AssinedDent = null;
+                        Room Room;
+
+                        //user enters the new appointment treatment
+                        Console.WriteLine("What is the appointment for:");
+                        NewTreatment = Console.ReadLine();
+                        
+
+                        //User Selects the price
+                        Console.WriteLine();
+                        Console.WriteLine("please select a price");
+                        Console.WriteLine("Band 1 - £22.70 (check-ups, scale and polish etc.)/// Type 3");
+                        Console.WriteLine("Band 2 - £62.10 (fillings, repairs etc.)/// Type 2:");
+                        Console.WriteLine("Band 3 £269.30 (crowns and other procedures)/// Type 3");
+
+                        string UserInput = Console.ReadLine();
+                        if (UserInput == "1") 
+                        {
+                            ChosenBand = Band1;
+                        }
+                        if (UserInput == "2") 
+                        {
+                            ChosenBand = Band2;
+                        }
+                        if (UserInput == "3") 
+                        {
+                            ChosenBand = Band3;
+                        }
+
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        //displays available Dentists
+                        for (int r = 0; r < Dentists.Count; r++)
+                        {
+
+                            if (Dentists[r].hasroom == true)
+                            {
+                                Console.WriteLine("/// ID:{0} ///Username: {1}/// name: {2} ///", r, Dentists[r].User, Dentists[r].Name);
+                                Console.WriteLine();
+                            }
+                        }
+
+                        
+                        //user choses the dentist to be assined to the appointment
+                        Console.WriteLine("select the id of the dentist:");
+
+                        string chosentDentist = Console.ReadLine();
+
+
+                        //   
+                        if (Dentists[int.Parse(chosentDentist)].hasroom == true)
+                        {
+                            AssinedDent = Dentists[int.Parse(chosentDentist)];
+
+                        }
+                        //
+                        //displays available rooms
+                        for (int r = 0; r < Patient.Count; r++)
+                        {
+                            for (int x = 0; x < Practices.Count; x++ ) 
+                            {
+                                if (Practices[x].PracID == Patient[r].pracid)
+                                {
+                                    for(int y = 0; y < Practices[x].pracRooms.Count; y++) 
+                                    {
+                                        if (Practices[x].pracRooms[y].assineddent == Patient[r].Dentist1) {
+
+                                            Console.WriteLine("Room: {0} /// Dentist: {1} /// Nurse: {2}", y, Practices[x].pracRooms[y].assineddent.Name, Practices[x].pracRooms[y].assinednur.Name);
+                                        
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+
+                        //user choses the dentist to be assined to the appointment
+                        Console.WriteLine("select the id of the room:");
+
+                        string chosentRoom = Console.ReadLine();
+
+
+                        // sets the room as the chosen room then creates the new instance.
+                        for (int r = 0; r < Patient.Count; r++)
+                        {
+                            for (int x = 0; x < Practices.Count; x++)
+                            {
+                                if (Practices[x].PracID == Patient[r].pracid)
+                                {
+                                    for (int y = 0; y < Practices[x].pracRooms.Count; y++)
+                                    {
+                                        if (Practices[x].pracRooms[y].assineddent == Patient[r].Dentist1)
+                                        {
+                                            if(int.Parse(chosentRoom) == y) 
+                                            {
+                                                Room = Practices[x].pracRooms[y];
+                                                Patient[r].PatientAppointments.Add(new Appointment(NewTreatment, ChosenBand, AssinedDent, Room));
+                                                //Practices[x].pracRooms[y].PatientAppointments.Add(new Appointment(NewTreatment, ChosenBand, AssinedDent, Room));
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+
+
+
                     }
                     void Cancel()
                     {
+                        //user choses which user to delete
+                        Console.WriteLine("type the ID of the Appointment being Canceled");
+                        string UserInput = Console.ReadLine();//user sets userinput
+                        Console.WriteLine("press enter to confirm");//confirms the total deletion
+                        Console.ReadLine();
+
+                        //removes the user
+                        for (int x = 0; x < Patient[x].PatientAppointments.Count; x++) //goes throu the id to look for which one non admin is assosiated with that id.
+                        {
+                            if (x == int.Parse(UserInput))
+                            {
+                                Patient[x].PatientAppointments.RemoveAt(int.Parse(UserInput));
+                                Console.Clear();
+                                ViewAppointments();
+                            }
+                        }
                     }
+                    LogIn();
                 }
                 void AddPatient()//needs Revisiting
                 {
@@ -1052,7 +1349,6 @@ namespace DentistManagementSystem
                 }
                 ManagePatientMenu();
             }
-
             LogIn();
         }
     }
