@@ -9,6 +9,9 @@ namespace DentistManagementSystem
     public class Receptionist : Staff
     {
         public int staffID = 1;
+        public int PracID;
+        public bool isassined = false;
+
 
         public Receptionist(string namee, string users, string password2)
         {
@@ -16,5 +19,8 @@ namespace DentistManagementSystem
             this.User = users;
             this.Password1 = password2;
         }
+
+        
+        
     }
 }

@@ -12,7 +12,7 @@ namespace DentistManagementSystem
         private string user;
         private string Password;
 
-        
+
 
         public string Name { get => name; set => name = value; }
         public string User { get => user; set => user = value; }

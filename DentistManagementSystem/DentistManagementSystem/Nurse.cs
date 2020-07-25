@@ -9,6 +9,8 @@ namespace DentistManagementSystem
     public class Nurse : Staff
     {
         public int staffID = 3;
+        public int roomid;
+        public int PracID;
         public bool hasroom = false;
 
         public Nurse(string namee, string users, string password2)
