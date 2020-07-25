@@ -4,3 +4,9 @@ C:\Users\callu\Desktop\Task-3-LoginSystem\Task-3-LoginSystem\bin\Debug\DentistMa
 C:\Users\callu\Desktop\Task-3-LoginSystem\Task-3-LoginSystem\bin\Debug\DentistManagementSystem.pdb
 C:\Users\callu\Desktop\Task-3-LoginSystem\Task-3-LoginSystem\obj\Debug\DentistManagementSystem.exe
 C:\Users\callu\Desktop\Task-3-LoginSystem\Task-3-LoginSystem\obj\Debug\DentistManagementSystem.pdb
+C:\Users\callu\Desktop\programming\DentistManagementSystem\DentistManagementSystem\obj\Debug\DentistManagementSystem.csprojAssemblyReference.cache
+C:\Users\callu\Desktop\programming\DentistManagementSystem\DentistManagementSystem\obj\Debug\DentistManagementSystem.exe
+C:\Users\callu\Desktop\programming\DentistManagementSystem\DentistManagementSystem\obj\Debug\DentistManagementSystem.pdb
+C:\Users\callu\Desktop\programming\DentistManagementSystem\DentistManagementSystem\bin\Debug\DentistManagementSystem.exe.config
+C:\Users\callu\Desktop\programming\DentistManagementSystem\DentistManagementSystem\bin\Debug\DentistManagementSystem.exe
+C:\Users\callu\Desktop\programming\DentistManagementSystem\DentistManagementSystem\bin\Debug\DentistManagementSystem.pdb

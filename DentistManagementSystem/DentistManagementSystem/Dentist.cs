@@ -9,7 +9,9 @@ namespace DentistManagementSystem
     class Dentist : Staff
     {
         public int staffID = 2;
+        public int roomid;
         public bool hasroom = false;
+        public int PracID;
         public Dentist(string namee, string users, string password2)
         {
             this.Name = namee;
