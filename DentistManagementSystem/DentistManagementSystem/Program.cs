@@ -18,7 +18,7 @@ namespace DentistManagementSystem
             Admin Admin = new Admin("George", "Admin", "admin");
             List<Receptionist> receptionists = new List<Receptionist> { new Receptionist("Rec1", "Rec1", "Rec1"), new Receptionist("Janed", "JaneDoed", "Rec1d"), new Receptionist("Rec3", "Rec3", "Rec3") };
             List<Nurse> Nurses = new List<Nurse> { new Nurse("jenny", "Jenny", "nurse1"), new Nurse("Nurse2", "Nurse2", "Nurse2"), new Nurse("Nurse3", "Nurse3", "Nurse3") };
-            List<Dentist> Dentists = new List<Dentist> { new Dentist("bill", "bill", "Dentist1"), new Dentist("billy", "Dentist2", "Dentist2"), };
+            List<Dentist> Dentists = new List<Dentist> { new Dentist("bill", "Bill", "Dent"), new Dentist("billy", "Dentist2", "Dentist2"), };
             List<DentalPractice> Practices = new List<DentalPractice> { new DentalPractice(true,"Taunton Dentist",0,receptionists[0])};
             List<Patient> Patient = new List<Patient> { new Patient ("pat1",1341341,"pat1@gmail.com",true,true,Dentists[0],0,"4 pat rd") };
             //testing vars
@@ -780,92 +780,228 @@ namespace DentistManagementSystem
                     int rec = 1;
                     int dentist = 2;
                     int nurse = 3;
-
+                    //login as Admin
                     if (curStaffid == admin) 
                     {
                         
                         SurMenu();
                     }
-
+                    //log in as Receptionist
                     if (curStaffid == rec)
                     {
                         Console.Clear();
                         reclogin();
                         
                     }
-
+                    //log in as dentist
                     if (curStaffid == dentist)
                     {
                         Console.Clear();
-                        nurdocLogin();
+                        docLogin();
                     }
-
+                    //log in as Nurse
                     if (curStaffid == nurse)
                     {
                         Console.Clear();
-                        nurdocLogin();
+                        nurLogin();
                     }
 
                 }
                 
-
-                
-
-                
-
-                void HiUser()//#What users see when they log in
-                {
-                    for (int x = 0; x < username.Count; x++)
-                    {
-                        if (username[x] == user)//if username matches the user show a welcome message including there status
-                        {
-                            Console.WriteLine("Welcome, {0} {1}", Names[x]);
-                        }
-                    }
-
-                    Console.WriteLine("press enter to Logout");
-                    Console.ReadLine();
-                    LogIn();
-
-
-                }
             }
-            void nurdocLogin()
+            void docLogin()
             {
                 void ManagePatientMenu()
                 {
-                    for (int y = 0; y < receptionists.Count; y++)
+                    Console.Clear();
+                    for (int y = 0; y < Dentists.Count; y++) //loops throgh the Dentists
                     {
-                        if (user == receptionists[y].User)
+                        if (user == Dentists[y].User)// finds the user throgh looking for the usernames
                         {
-                            if (receptionists[y].isassined == true)
+                            for(int r = 0; r < Patient.Count; r++) //loops throgh the patients
                             {
-                                //displays the choices and the patients
-                                Console.WriteLine("Patients:");
-                                for (int x = 0; x < Patient.Count; x++)
+                                if (Patient[r].Dentist1.User == user) // finds the Patients Dentist
                                 {
-                                    Console.WriteLine("num: {0}//Name:{1}///Number: {2}///Email: {3}//Adress {4}// Dentist Name: {5}", x, Patient[x].Name1, Patient[x].Number, Patient[x].Email1, Patient[x].Address1, Patient[x].Dentist1.Name);
-                                }
-                                Console.WriteLine("1. select patient");
+                                    //displays the choices and the patients
+                                    Console.WriteLine("Patients:");
+                                    for (int x = 0; x < Patient.Count; x++)
+                                    {
+                                        Console.WriteLine("num: {0}//Name:{1}///Number: {2}///Email: {3}//Adress {4}// Dentist Name: {5}", x, Patient[x].Name1, Patient[x].Number, Patient[x].Email1, Patient[x].Address1, Patient[x].Dentist1.Name);
+                                    }
+                                    Console.WriteLine("1. select patient");
+                                    Console.WriteLine("2. Logout");
 
-                                //user choice
-                                string X = Console.ReadLine();
+                                    //user choice
+                                    string X = Console.ReadLine();
 
-                                if (X == "1")
-                                {
-                                    ViewPatient();
+                                    if (X == "1")
+                                    {
+                                        ViewPatient();
+                                    }
+                                    if (X == "2")
+                                    {
+                                        LogIn();
+                                    }
+
                                 }
+                            }
                                 
+                            
+                        }
+                    }
+                    LogIn();
+
+                }
+                void ViewPatient()
+                {
+                    Console.Clear();
+                    string selected = null;
+                    //displays all the available Patients
+                    for (int x = 0; x < Patient.Count; x++) //loops throgh the Patients
+                    {
+                        for (int y = 0; y < Dentists.Count; y++) //loops throgh the Dentists 
+                        {
+                            if (Patient[x].Dentist1 == Dentists[y])// Matches them together
+                            {
+                                //displays Patient information
+                                Console.WriteLine("/// ID:{0} ///Name: {1}// Email: {2}// Phone: {3}// Address{4}", x, Patient[x].Name1, Patient[x].Email1, Patient[x].Number, Patient[x].Address1);
 
                             }
-                            else
+                        }
+                    }
+
+                    Console.WriteLine("select the id of the Patient :");
+                    string chosenpatient = Console.ReadLine();//user choses a patient
+
+                    for (int x = 0; x < Patient.Count; x++) //loops through the Patients
+                    {
+                        for (int y = 0; y < Dentists.Count; y++)//loops throgh the Dentists
+                        {
+                            if (Patient[x].Dentist1 == Dentists[y]) //Matches them
                             {
-                                // if the receptionist is not assined no patients can be a assined to them
-                                Console.WriteLine("you are not assined yet Please try again later");
-                                Console.ReadLine();
-                                user = null;
-                                LogIn();
+                                //sets the selected patients name as selected and then uses the view appointments function
+                                selected = Patient[int.Parse(chosenpatient)].Name1;//selected patient 
+                                MakeAppointmentnote(); //then allows the user to make a note
                             }
+                        }
+                    }
+
+                    void MakeAppointmentnote()
+                    {
+                        //displays all appointments for the selected patient
+                        Console.Clear();
+                        for (int x = 0; x < Patient.Count; x++)//loops throgh the patients
+                        {
+                            if (selected == Patient[x].Name1) //finds the selected Patient
+                            {
+                                //displays the selected information
+                                Console.WriteLine("appointments for {0}:", selected);
+                                for (int r = 0; r < Patient[x].PatientAppointments.Count; r++)//loops throgh the patients appointments 
+                                {
+                                    //displays them
+                                    
+                                    Console.WriteLine("id:{0} /// Appointment for a {1} /// Costs: £{2} // with {3} // In room {4}", r, Patient[x].PatientAppointments[r].Treatment1, Patient[x].PatientAppointments[r].Price, Patient[x].PatientAppointments[r].dentist.Name, Patient[x].PatientAppointments[r].room.roomid);
+                                    Console.WriteLine("Notes:");
+                                    for (int t = 0; t < Patient[x].PatientAppointments[r].notes.Count; t++)
+                                    {
+                                        Console.WriteLine("{0}", Patient[x].PatientAppointments[r].notes[t]);
+                                        Console.WriteLine();
+                                    }
+                                    Console.WriteLine();
+                                    Console.WriteLine();
+                                }
+                            }
+                        }
+                        // lets the user Decide whether they want to make a appointment or cancel an Existing one
+
+                        //makes selects a patient then asks the user to confirm or go back
+                        Console.WriteLine("To make a Note on a Specific appointment select the appointment ID to go back press enter:");
+                        string selectedid = Console.ReadLine();
+                        Console.WriteLine("type 1 to confirm press enter to go back:");
+                        string Userinput = Console.ReadLine();
+
+
+                        if (Userinput == "1") { }
+                        if (Userinput == "") { ManagePatientMenu();}
+
+                        // loops through the patients to find the selected patient the initalizes the new note function which reqires the appointment selected and the patient 
+                        for (int x = 0; x < Patient.Count; x++)
+                        {
+                            if (selected == Patient[x].Name1)
+                            {
+                                for (int r = 0; r < Patient[x].PatientAppointments.Count; r++)
+                                {
+                                    if (r == int.Parse(selectedid)) 
+                                    {
+                                        newnote(x,r);
+                                        MakeAppointmentnote();
+                                    }
+
+
+                                }
+                            }
+                        }
+                        void newnote(int Chosenappointment, int selap) 
+                        {
+                            //asks the user to make the new note
+                            Console.Clear();
+                            Console.WriteLine("Type the note then press enter");
+                            Patient[Chosenappointment].PatientAppointments[selap].notes.Add(Console.ReadLine() + " (Note Made by " + user +")");
+                            Console.Clear();
+                            ManagePatientMenu();
+                        }
+                        ManagePatientMenu();
+                    }
+                    
+                    
+                    LogIn();
+                }
+                ManagePatientMenu();
+            }
+            void nurLogin()
+            {
+                void ManagePatientMenu()
+                {
+                    Console.Clear();
+                    for (int y = 0; y < Nurses.Count; y++) //loops throgh the nurses 
+                    {
+                        if (user == Nurses[y].User)// finds the logged in nurse
+                        {
+                            for (int r = 0; r < Patient.Count; r++)//loops though the Patients
+                            {
+                                if (Nurses[y].User == user)
+                                {
+                                    for (int k = 0; k < Dentists.Count;)// loops throgh the dentists
+                                    {
+                                        if (Dentists[k].User == Patient[r].Dentist1.User) //finds the patients Dentist
+                                        {
+                                            //displays the choices and the patients
+                                            Console.WriteLine("Patients:");
+                                            for (int x = 0; x < Patient.Count; x++)
+                                            {
+                                                Console.WriteLine("num: {0}//Name:{1}///Number: {2}///Email: {3}//Adress {4}// Dentist Name: {5}", x, Patient[x].Name1, Patient[x].Number, Patient[x].Email1, Patient[x].Address1, Patient[x].Dentist1.Name);
+                                            }
+                                            Console.WriteLine("1. select patient");
+                                            Console.WriteLine("2. Logout");
+
+                                            //user choice
+                                            string X = Console.ReadLine();
+
+                                            if (X == "1")
+                                            {
+                                                ViewPatient();
+                                            }
+                                            if (X == "2")
+                                            {
+                                                LogIn();
+                                            }
+                                        }
+                                    }
+
+                                }
+                            }
+
+
                         }
                     }
                     LogIn();
@@ -888,9 +1024,11 @@ namespace DentistManagementSystem
                         }
                     }
 
-                    Console.WriteLine("select the id of the Patient to select:");
+                    Console.WriteLine("select the id of the Patient :");
                     string chosenpatient = Console.ReadLine();//user choses a patient
 
+
+                    //finds the Selected patients Dentist then allows the nurse to make a note
                     for (int x = 0; x < Patient.Count; x++)
                     {
                         for (int y = 0; y < Dentists.Count; y++)
@@ -899,52 +1037,81 @@ namespace DentistManagementSystem
                             {
                                 //sets the selected patients name as selected and then uses the view appointments function
                                 selected = Patient[int.Parse(chosenpatient)].Name1;
-                                ViewAppointments();
+                                MakeAppointmentnote();
                             }
                         }
                     }
 
-                    void ViewAppointments()
+                    void MakeAppointmentnote()
                     {
                         //displays all appointments for the selected patient
                         Console.Clear();
                         for (int x = 0; x < Patient.Count; x++)
                         {
-                            if (selected == Patient[x].Name1)
+                            if (selected == Patient[x].Name1) //finds selected patient
                             {
                                 Console.WriteLine("appointments for {0}:", selected);
                                 for (int r = 0; r < Patient[x].PatientAppointments.Count; r++)
                                 {
+                                    //displays the appointments with the notes and marks who made the note
                                     Console.WriteLine("id:{0} /// Appointment for a {1} /// Costs: £{2} // with {3} // In room {4}", r, Patient[x].PatientAppointments[r].Treatment1, Patient[x].PatientAppointments[r].Price, Patient[x].PatientAppointments[r].dentist.Name, Patient[x].PatientAppointments[r].room.roomid);
+                                    Console.WriteLine("Notes:");
+                                    for (int t = 0; t < Patient[x].PatientAppointments[r].notes.Count; t++)
+                                    {
+                                        Console.WriteLine("{0}", Patient[x].PatientAppointments[r].notes[t]);
+                                        Console.WriteLine();
+                                    }
+                                    Console.WriteLine();
+                                    Console.WriteLine();
+                                }
+                            }
+                        }
+                        // lets the user Decide whether they want to select the appointment to add a note then confirm if they still wanted to do it
+                        Console.WriteLine("To make a Note on a Specific appointment select the appointment ID to go back press enter:");
+                        string selectedid = Console.ReadLine();
+                        Console.WriteLine("type 1 to confirm press enter to go back:");
+                        string Userinput = Console.ReadLine();
+                        if (Userinput == "1") { }
+                        if (Userinput == "") { ManagePatientMenu(); }
+                        for (int x = 0; x < Patient.Count; x++)
+                        {
+                            if (selected == Patient[x].Name1)
+                            {
+                                for (int r = 0; r < Patient[x].PatientAppointments.Count; r++)
+                                {
+                                    if (r == int.Parse(selectedid))
+                                    {
+                                        newnote(x, r);
+                                        MakeAppointmentnote();
+                                    }
+
 
                                 }
                             }
                         }
-                        // lets the user Decide whether they want to make a appointment or cancel an Existing one
-                        Console.WriteLine("To make a new appointment type 1:");
-                        Console.WriteLine("To Cancel An existing appointment type 2:");
-                        string UserChoice = Console.ReadLine();
-
-                        if (UserChoice == "1")
+                        void newnote(int Chosenappointment, int selap)
                         {
-                            //MakeAppointment();
-                        }
-                        if (UserChoice == "2")
-                        {
-                            //Cancel();
+                            //creates the new note
+                            Console.Clear();
+                            Console.WriteLine("Type the note then press enter");
+                            Patient[Chosenappointment].PatientAppointments[selap].notes.Add(Console.ReadLine() + " (Note Made by " + user + ")");
+                            Console.Clear();
+                            ManagePatientMenu();
                         }
                         ManagePatientMenu();
                     }
-                    
-                    
+
+
                     LogIn();
                 }
+                ManagePatientMenu();
             }
             void reclogin() {
                 string X = null;
                 void ManagePatientMenu()
                 {
-                    for(int y = 0; y < receptionists.Count; y++) 
+                    Console.Clear();
+                    for (int y = 0; y < receptionists.Count; y++) 
                     { 
                         if (user == receptionists[y].User) 
                         {
