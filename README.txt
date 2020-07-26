@@ -1,10 +1,10 @@
 # SCDT41-Programming-and-Software-Fundamentals
 Features added
-  .view patient 
-    .the Receptionists can make Appointments
-    .the receptionists can cancel Appointments
-    
+  
+    .nurses and Dentists can View patients and appointments
+      .Nurses and Dentists can also make note and it marks that the logged in user made them
 Issues
   
   . not much validation
+  . The Navigation to log out on all of the Users needs Fixing
   
