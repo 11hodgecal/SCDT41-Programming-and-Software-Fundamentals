@@ -13,7 +13,6 @@ namespace DentistManagementSystem
         public bool hasNurse = false;
         public Nurse assinednur;
         public Dentist assineddent;
-        public List<Appointment> PatientAppointments = new List<Appointment>();
         public Room(int roomid, bool hasDentist, bool hasNurse, Nurse assinednur, Dentist assineddent)
         {
             this.roomid = roomid;
