@@ -12,7 +12,6 @@ namespace DentistManagementSystem
         {
             int LogCur = 0;//current log in attempts
             string user = "";//who is the user
-            int num = 0;
 
             //initalizes the staff classes
             Admin Admin = new Admin("George", "Admin", "admin");
@@ -67,8 +66,136 @@ namespace DentistManagementSystem
             }
 
 
-            void SurMenu() 
+            
+            void LogIn() //logs a user in
             {
+                int isuserright = 0;//show if user is wrong
+                int ispassright = 0;// show if pass is wrong
+                LogCur = 0;
+                user = "";
+                int curStaffid = 0;
+
+                
+                while (LogCur != 4) //while within the ammount of attemts allowed
+                {
+
+                    //for user
+                    LogCur++;//add one to log current
+                    Console.Clear();
+                    Console.WriteLine("Please enter your Username and Password:");
+                    Console.WriteLine();
+                    Console.WriteLine("Username:");
+                    string Username = Console.ReadLine();//user input = Username
+                    Console.WriteLine("Password:");
+                    string Password = Console.ReadLine();//user input = password
+                    Console.WriteLine();
+                    
+
+
+                    for (int x = 0; x < username.Count; x++)
+                    {
+                        //if the details where right
+
+                        if (username[x] == Username) // if userinput = username add 1 to is right
+                        {
+                            user = Username;//checks which user is logging in
+                            curStaffid = staffid[x];//saves there id
+                            ispassright++;
+                            if (password[x] == Password)// if userinput = password add 1 to is right
+                            {
+                                ispassright++;
+                                if (ispassright == 2) //if isright equals 2 login
+                                {
+
+                                    LogCur = 4;
+                                    
+
+                                }
+
+                            }
+
+                        }
+                        if (password[x] == Password) // if password is right
+                        {
+
+                            isuserright++;
+                            if (username[x] == Username) // if uname is right
+                            {
+                                isuserright++;
+                                if (isuserright == 2) // log in
+                                {
+                                    LogCur = 4;
+                                }
+
+                            }
+
+                        }
+                    }
+
+                    //what do do if details are wrong
+                    if (isuserright == 1) // if username show user error and the attempts they have left
+                    {
+                        Console.WriteLine("You have entered your Username wrong");
+                        Console.WriteLine();
+                        Console.ReadLine();
+                    }
+                    else if (ispassright == 1) // if password is wrong show error
+                    {
+                        Console.WriteLine("You have entered your Password wrong");
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        Console.ReadLine();
+                    }
+                    else if (ispassright == 0)// if both are wrong show wrong
+                    {
+                        Console.WriteLine("You entered both your password and Username wrong");
+                        Console.WriteLine();
+                        Console.ReadLine();
+                    }
+
+
+
+                }
+
+
+                if (LogCur == 4)
+                {
+                    
+                    int admin = 0;
+                    int rec = 1;
+                    int dentist = 2;
+                    int nurse = 3;
+                    //login as Admin
+                    if (curStaffid == admin) 
+                    {
+                        SurMenu();
+                    }
+                    //log in as Receptionist
+                    if (curStaffid == rec)
+                    {
+                        Console.Clear();
+                        reclogin();
+                        
+                    }
+                    //log in as dentist
+                    if (curStaffid == dentist)
+                    {
+                        Console.Clear();
+                        docLogin();
+                    }
+                    //log in as Nurse
+                    if (curStaffid == nurse)
+                    {
+                        Console.Clear();
+                        nurLogin();
+                    }
+
+                }
+                
+            }
+            void SurMenu()
+            {
+
                 Console.Clear();
                 Console.WriteLine("Choose a practice");
                 Console.WriteLine();
@@ -81,11 +208,11 @@ namespace DentistManagementSystem
                 }
                 Console.WriteLine();
                 //user selects what they are going to do
-                Console.WriteLine("1: to select dentist");
-                Console.WriteLine("2: to add dentist");
+                Console.WriteLine("1: Select Practice");
+                Console.WriteLine("2: To Create a new Practice");
                 Console.WriteLine("3: Employee Management");
                 string userinput = Console.ReadLine();
-                if (userinput == "1") 
+                if (userinput == "1")
                 {
                     SelectDentist();
                 }
@@ -97,44 +224,43 @@ namespace DentistManagementSystem
                 {
                     HiAdmin();
                 }
-                
-                void AddDentist() 
+
+                void AddDentist()
                 {
                     //user input that creates a new name and id for the new surgery
                     Console.Clear();
-                    Console.WriteLine("enter the name of the new dentist:");
+                    Console.WriteLine("Enter the name of the new Practice:");
                     string newName = Console.ReadLine();
                     int newsurID = Practices.Count;//the new Surgery id
-                    int x; 
-                    int y = 0;
-
+                    int x;
+                    Console.Clear();
                     //Displays the available Receptionists
-                    Console.WriteLine("assign a Receptionist:");
-                    for (x = 0 ; x < receptionists.Count; x++)
-                    {
-
-                        if (receptionists[x].isassined == false) { 
-                            Console.WriteLine("{0}.{1}", x, receptionists[x].Name);
-                            
-                        }
-                    }
-                    
-                    // Creates the new Surgery.
-                    Console.WriteLine();
-                    Console.WriteLine("which dentist will be assined:");
-                    string AssinedDent = Console.ReadLine();
-                    
                     for (x = 0; x < receptionists.Count; x++)
                     {
-                        if (x.ToString() == AssinedDent) 
+
+                        if (receptionists[x].isassined == false)
                         {
-                            Practices.Add(new DentalPractice(true, newName,newsurID, receptionists[x]));
+                            Console.WriteLine("{0}.{1}", x, receptionists[x].Name);
+
+                        }
+                    }
+
+                    // Creates the new Surgery.
+                    Console.WriteLine();
+                    Console.WriteLine("Which Receptionist will be assined:");
+                    string AssinedDent = Console.ReadLine();
+
+                    for (x = 0; x < receptionists.Count; x++)
+                    {
+                        if (x.ToString() == AssinedDent)
+                        {
+                            Practices.Add(new DentalPractice(true, newName, newsurID, receptionists[x]));
                             receptionists[x].isassined = true;
                         }
                     }
                     SurMenu();
                 };//Add a Dentist Surgery
-                void SelectDentist() 
+                void SelectDentist()
                 {
                     //user selects a practice to find more details.
                     Console.Clear();
@@ -145,14 +271,14 @@ namespace DentistManagementSystem
                         Console.WriteLine("{0}.{1}", x, Practices[x].Name);
                         userchoice = x.ToString();
                     }
-                    Console.WriteLine("select the practice");
+                    Console.WriteLine("Select the Practice:");
 
                     //finds the selected practice on the users input.
                     string Userinput = Console.ReadLine();
                     Console.Clear();
-                    for(int X = 0; X < Practices.Count; X++) 
+                    for (int X = 0; X < Practices.Count; X++)
                     {
-                        if (Userinput == userchoice) 
+                        if (Userinput == userchoice)
                         {
                             ChosenPractice = Practices[X];
                         }
@@ -162,31 +288,32 @@ namespace DentistManagementSystem
                         selectedDentist();
                     }
                 };//selecting a dentist
-                void selectedDentist() 
+                void selectedDentist()
                 {
                     int x = 0;
-                    int Chosenroom;
 
                     //displays all of the rooms in the practice
-                    Console.WriteLine("Receptionist:{0}",ChosenPractice.AssinedRec.Name);
+                    Console.WriteLine("Receptionist:{0}", ChosenPractice.AssinedRec.Name);
                     for (x = 0; x < ChosenPractice.pracRooms.Count; x++)
                     {
                         Console.WriteLine("Room: {0} /// Dentist: {1} /// Nurse: {2}", x, ChosenPractice.pracRooms[x].assineddent.Name, ChosenPractice.pracRooms[x].assinednur.Name);
-                        
+
                     }
 
                     //user choses to add a room
                     Console.WriteLine();
-                    Console.WriteLine("1: to add Room");
+                    Console.WriteLine("1: Add Room");
+                    Console.WriteLine("Enter to go back to main menu");
                     string Userchoice = Console.ReadLine();
                     if (Userchoice == "1")
                     {
                         CreateRoom();
                     }
 
-                    void CreateRoom() {
+                    void CreateRoom()
+                    {
 
-                        
+
                         //variables 
                         Console.Clear();
                         int newID = ChosenPractice.pracRooms.Count;//new id
@@ -196,11 +323,11 @@ namespace DentistManagementSystem
                         //displays available dentists
                         Console.WriteLine("Available Dentists:");
 
-                        for (x = 0; x < Dentists.Count; x++) 
+                        for (x = 0; x < Dentists.Count; x++)
                         {
-                            if (Dentists[x].hasroom == false) 
+                            if (Dentists[x].hasroom == false)
                             {
-                                Console.WriteLine("{0}. Name: {1}",x,Dentists[x].Name);
+                                Console.WriteLine("{0}. Name: {1}", x, Dentists[x].Name);
                             }
                         }
 
@@ -249,20 +376,19 @@ namespace DentistManagementSystem
                                 Practices[x].pracRooms.Add(new Room(newID, true, true, assinednur, assineddentist));
                                 for (int r = 0; r < Dentists.Count; r++)
                                 {
-                                    if(Dentists[r].User == assineddentist.User) 
+                                    if (Dentists[r].User == assineddentist.User)
                                     {
                                         Dentists[r].hasroom = true;
                                     }
-                                } 
+                                }
                             }
                         }
                         Console.Clear();
-                        SurMenu(); 
+                        SurMenu();
 
 
 
                     }//create room
-
                     SurMenu();
                 }//what to do when a Dentist is selected
                 void HiAdmin() //what admins see's
@@ -271,7 +397,7 @@ namespace DentistManagementSystem
                     {
                         void ADD() //add user
                         {
-                            
+
 
                             Console.WriteLine("what type of user need to be added");
                             Console.WriteLine("Add Receptionist: 1");
@@ -394,19 +520,14 @@ namespace DentistManagementSystem
                             
                             Console.WriteLine("Please enter the ID of the User you want to remove");
                             string UserInput = Console.ReadLine();//user sets userinput
-                            Console.WriteLine("press enter to confirm");//confirms the total deletion
+                            Console.WriteLine("Press enter to confirm");//confirms the total deletion
                             Console.ReadLine();
                             if (UserInput == "0")//goes back to the main menu and show error
                             {
                                 Console.WriteLine("Invalid Input");
                                 Console.ReadLine();
                             }
-                            else if (int.Parse(UserInput) > staffid.Max())//goes back to the main menu and show error
-                            {
-                                Console.WriteLine("Invalid Input");
-                                Console.ReadLine();
-                            }
-
+                            Console.Clear();
 
 
                             for (int x = 0; x < staffid.Count; x++) //goes throu the id to look for which one non admin is assosiated with that id.
@@ -416,17 +537,13 @@ namespace DentistManagementSystem
 
                                     if (x == int.Parse(UserInput))
                                     {
-                                        //deletes all infomation on the selected ID
-                                        username.Remove(username[x]);
-                                        password.Remove(password[x]);
-                                        Names.Remove(Names[x]);
-                                        staffid.Remove(staffid[x]);
+                                        
                                         //removes the instance
 
                                         //check if the entry is a nurse and removes the instance
-                                        for (int y = 0; y < Nurses.Count; y++) 
+                                        for (int y = 0; y < Nurses.Count; y++)
                                         {
-                                            if (username[x] == Nurses[y].User) 
+                                            if (username[x] == Nurses[y].User)
                                             {
                                                 Nurses.RemoveAt(y);
                                                 SurMenu();
@@ -440,18 +557,24 @@ namespace DentistManagementSystem
                                                 //removes the room that is attached to the nurse
                                                 Dentists.RemoveAt(y);
                                                 SurMenu();
-                                                
+
                                             }
                                         }
                                         //checks if the entry is a Receptionist and removes the instance
-                                        for (int y = 0 ; y < receptionists.Count; y++)
+                                        for (int y = 0; y < receptionists.Count; y++)
                                         {
-                                            if (username[x + 1] == receptionists[y].User)
+                                            if (username[x] == receptionists[y].User)
                                             {
                                                 receptionists.RemoveAt(y);
                                                 SurMenu();
                                             }
                                         }
+
+                                        //deletes all infomation on the selected ID
+                                        username.Remove(username[x]);
+                                        password.Remove(password[x]);
+                                        Names.Remove(Names[x]);
+                                        staffid.Remove(staffid[x]);
                                     }
 
 
@@ -464,7 +587,7 @@ namespace DentistManagementSystem
                         }
 
 
-                        Console.WriteLine("do you want to add or remove a user:");
+                        Console.WriteLine("Do you want to Add or Remove a user:");
                         Console.WriteLine("Add: 1");
                         Console.WriteLine("Remove: 2");
                         string Userinput = Console.ReadLine();
@@ -480,14 +603,17 @@ namespace DentistManagementSystem
                     }
                     void ChangeDetails()//change users details
                     {
-                        Console.WriteLine("enter the id of the User you want to change");
+                        
+                        Console.WriteLine("Enter the id of the User you want to change");
                         string UserinputID = Console.ReadLine();
                         if (UserinputID == "0")//goes back to the main menu and show error
                         {
                             Console.WriteLine("Invalid Input");
                             Console.ReadLine();
+
                             UserMenu();
                         }
+                        Console.Clear();
                         //stores all infomation assosiated with the id
                         string[] userinfoarray = { username[int.Parse(UserinputID)], password[int.Parse(UserinputID)], Names[int.Parse(UserinputID)] };
                         //shows user the choices
@@ -518,9 +644,9 @@ namespace DentistManagementSystem
                                     username[x] = Userinput; // sets the new username
 
                                     //updates the classes Username
-                                    for(int y = 0; y < Nurses.Count; y++) 
-                                    { 
-                                        if (userinfoarray[0] == Nurses[y].User) 
+                                    for (int y = 0; y < Nurses.Count; y++)
+                                    {
+                                        if (userinfoarray[0] == Nurses[y].User)
                                         {
                                             Nurses[y].User = username[x];
                                         }
@@ -541,7 +667,7 @@ namespace DentistManagementSystem
                                             receptionists[y].User = username[x];
                                         }
                                     }
-                                    
+
                                 }
                             }
                         }
@@ -643,16 +769,15 @@ namespace DentistManagementSystem
                         {
                             if (staffid[x] > 0)// displays a user table
                             {
-                                
-                                Console.WriteLine("/// ID:{0} ///Username: {1} /// Password: {2} /// name: {3} /// StaffID: {4}///", x, username[x], password[x], Names[x], staffid[x]);
+
+                                Console.WriteLine("/// ID:{0} ///Username: {1} /// Password: {2} /// Name: {3} /// StaffID: {4}///", x, username[x], password[x], Names[x], staffid[x]);
                                 Console.WriteLine();
                             }
 
 
                         }
-                        Console.WriteLine("/// StaffID 1 = Receptionist ///Staffid 2: Dentist ///staffid 3: Dental nurses");
+                        Console.WriteLine("/// StaffID 1 = Receptionist ///Staffid 2: Dentist ///Staffid 3: Dental nurses");
                         //user choice
-                        Console.WriteLine("what do you want to do next:");
                         Console.WriteLine();
                         Console.WriteLine("To add or remove a user: 1");
                         Console.WriteLine("To Update a users informaton: 2");
@@ -674,140 +799,12 @@ namespace DentistManagementSystem
 
                         SurMenu();
                     }
-                    
+
 
                     UserMenu();
 
                 }//employee Management System
 
-            }
-            void LogIn() //logs a user in
-            {
-                int isuserright = 0;//show if user is wrong
-                int ispassright = 0;// show if pass is wrong
-                int FIsAdmin = 0;//check if user is an admin in the while loop
-                LogCur = 0;
-                user = "";
-                int curStaffid = 0;
-
-                
-                while (LogCur != 4) //while within the ammount of attemts allowed
-                {
-
-                    //for user
-                    LogCur++;//add one to log current
-                    Console.Clear();
-                    Console.WriteLine("please enter your username and password:");
-                    Console.WriteLine();
-                    Console.WriteLine("Username:");
-                    string Username = Console.ReadLine();//user input = Username
-                    Console.WriteLine("Password:");
-                    string Password = Console.ReadLine();//user input = password
-                    Console.WriteLine();
-                    
-
-
-                    for (int x = 0; x < username.Count; x++)
-                    {
-                        //if the details where right
-
-                        if (username[x] == Username) // if userinput = username add 1 to is right
-                        {
-                            user = Username;//checks which user is logging in
-                            curStaffid = staffid[x];//saves there id
-                            ispassright++;
-                            if (password[x] == Password)// if userinput = password add 1 to is right
-                            {
-                                ispassright++;
-                                if (ispassright == 2) //if isright equals 2 login
-                                {
-
-                                    LogCur = 4;
-                                    
-
-                                }
-
-                            }
-
-                        }
-                        if (password[x] == Password) // if password is right
-                        {
-
-                            isuserright++;
-                            if (username[x] == Username) // if uname is right
-                            {
-                                isuserright++;
-                                if (isuserright == 2) // log in
-                                {
-                                    LogCur = 4;
-                                }
-
-                            }
-
-                        }
-                    }
-
-                    //what do do if details are wrong
-                    if (isuserright == 1) // if username show user error and the attempts they have left
-                    {
-                        Console.WriteLine("You have entered your Username wrong");
-                        Console.WriteLine();
-                        Console.ReadLine();
-                    }
-                    else if (ispassright == 1) // if password is wrong show error
-                    {
-                        Console.WriteLine("you have entered your Password wrong");
-                        Console.WriteLine();
-                        Console.WriteLine();
-                        Console.ReadLine();
-                    }
-                    else if (ispassright == 0)// if both are wrong show wrong
-                    {
-                        Console.WriteLine("you entered both your password and Username wrong");
-                        Console.WriteLine();
-                        Console.ReadLine();
-                    }
-
-
-
-                }
-
-
-                if (LogCur == 4)
-                {
-                    
-                    int admin = 0;
-                    int rec = 1;
-                    int dentist = 2;
-                    int nurse = 3;
-                    //login as Admin
-                    if (curStaffid == admin) 
-                    {
-                        
-                        SurMenu();
-                    }
-                    //log in as Receptionist
-                    if (curStaffid == rec)
-                    {
-                        Console.Clear();
-                        reclogin();
-                        
-                    }
-                    //log in as dentist
-                    if (curStaffid == dentist)
-                    {
-                        Console.Clear();
-                        docLogin();
-                    }
-                    //log in as Nurse
-                    if (curStaffid == nurse)
-                    {
-                        Console.Clear();
-                        nurLogin();
-                    }
-
-                }
-                
             }
             void docLogin()
             {
@@ -826,9 +823,9 @@ namespace DentistManagementSystem
                                     Console.WriteLine("Patients:");
                                     for (int x = 0; x < Patient.Count; x++)
                                     {
-                                        Console.WriteLine("num: {0}//Name:{1}///Number: {2}///Email: {3}//Adress {4}// Dentist Name: {5}", x, Patient[x].Name1, Patient[x].Number, Patient[x].Email1, Patient[x].Address1, Patient[x].Dentist1.Name);
+                                        Console.WriteLine("Num: {0}//Name:{1}///Number: {2}///Email: {3}//Address {4}// Dentist Name: {5}", x, Patient[x].Name1, Patient[x].Number, Patient[x].Email1, Patient[x].Address1, Patient[x].Dentist1.Name);
                                     }
-                                    Console.WriteLine("1. select patient");
+                                    Console.WriteLine("1. Select patient");
                                     Console.WriteLine("2. Logout");
 
                                     //user choice
@@ -870,7 +867,7 @@ namespace DentistManagementSystem
                         }
                     }
 
-                    Console.WriteLine("select the id of the Patient :");
+                    Console.WriteLine("Select the id of the Patient:");
                     string chosenpatient = Console.ReadLine();//user choses a patient
 
                     for (int x = 0; x < Patient.Count; x++) //loops through the Patients
@@ -900,15 +897,16 @@ namespace DentistManagementSystem
                                 {
                                     //displays them
                                     
-                                    Console.WriteLine("id:{0} /// Appointment for a {1} /// Costs: £{2} // with {3} // In room {4}", r, Patient[x].PatientAppointments[r].Treatment1, Patient[x].PatientAppointments[r].Price, Patient[x].PatientAppointments[r].dentist.Name, Patient[x].PatientAppointments[r].room.roomid);
+                                    Console.WriteLine("ID:{0} /// Appointment for a {1} /// Costs: £{2} // With {3} // In room {4}", r, Patient[x].PatientAppointments[r].Treatment1, Patient[x].PatientAppointments[r].Price, Patient[x].PatientAppointments[r].dentist.Name, Patient[x].PatientAppointments[r].room.roomid);
                                     Console.WriteLine("Notes:");
+                                    Console.WriteLine();
                                     for (int t = 0; t < Patient[x].PatientAppointments[r].notes.Count; t++)
                                     {
                                         Console.WriteLine("{0}", Patient[x].PatientAppointments[r].notes[t]);
-                                        Console.WriteLine();
+                                        Console.WriteLine("///////////////////////////////////////////////////////////////////////////////////////////////////////////////");
                                     }
                                     Console.WriteLine();
-                                    Console.WriteLine();
+                                     
                                 }
                             }
                         }
@@ -917,7 +915,8 @@ namespace DentistManagementSystem
                         //makes selects a patient then asks the user to confirm or go back
                         Console.WriteLine("To make a Note on a Specific appointment select the appointment ID to go back press enter:");
                         string selectedid = Console.ReadLine();
-                        Console.WriteLine("type 1 to confirm press enter to go back:");
+                        Console.WriteLine("Type 1 to confirm:");
+                        Console.WriteLine("Press enter to go back:");  
                         string Userinput = Console.ReadLine();
 
 
@@ -979,9 +978,9 @@ namespace DentistManagementSystem
                                             Console.WriteLine("Patients:");
                                             for (int x = 0; x < Patient.Count; x++)
                                             {
-                                                Console.WriteLine("num: {0}//Name:{1}///Number: {2}///Email: {3}//Adress {4}// Dentist Name: {5}", x, Patient[x].Name1, Patient[x].Number, Patient[x].Email1, Patient[x].Address1, Patient[x].Dentist1.Name);
+                                                Console.WriteLine("Num: {0}//Name:{1}///Number: {2}///Email: {3}//Adress {4}// Dentist Name: {5}", x, Patient[x].Name1, Patient[x].Number, Patient[x].Email1, Patient[x].Address1, Patient[x].Dentist1.Name);
                                             }
-                                            Console.WriteLine("1. select patient");
+                                            Console.WriteLine("1. Select patient");
                                             Console.WriteLine("2. Logout");
 
                                             //user choice
@@ -1024,7 +1023,7 @@ namespace DentistManagementSystem
                         }
                     }
 
-                    Console.WriteLine("select the id of the Patient :");
+                    Console.WriteLine("Select the id of the Patient :");
                     string chosenpatient = Console.ReadLine();//user choses a patient
 
 
@@ -1050,11 +1049,11 @@ namespace DentistManagementSystem
                         {
                             if (selected == Patient[x].Name1) //finds selected patient
                             {
-                                Console.WriteLine("appointments for {0}:", selected);
+                                Console.WriteLine("Appointments for {0}:", selected);
                                 for (int r = 0; r < Patient[x].PatientAppointments.Count; r++)
                                 {
                                     //displays the appointments with the notes and marks who made the note
-                                    Console.WriteLine("id:{0} /// Appointment for a {1} /// Costs: £{2} // with {3} // In room {4}", r, Patient[x].PatientAppointments[r].Treatment1, Patient[x].PatientAppointments[r].Price, Patient[x].PatientAppointments[r].dentist.Name, Patient[x].PatientAppointments[r].room.roomid);
+                                    Console.WriteLine("Id:{0} /// Appointment for a {1} /// Costs: £{2} // With {3} // In room {4}", r, Patient[x].PatientAppointments[r].Treatment1, Patient[x].PatientAppointments[r].Price, Patient[x].PatientAppointments[r].dentist.Name, Patient[x].PatientAppointments[r].room.roomid);
                                     Console.WriteLine("Notes:");
                                     for (int t = 0; t < Patient[x].PatientAppointments[r].notes.Count; t++)
                                     {
@@ -1062,14 +1061,14 @@ namespace DentistManagementSystem
                                         Console.WriteLine();
                                     }
                                     Console.WriteLine();
-                                    Console.WriteLine();
+                                    Console.WriteLine("///////////////////////////////////////////////////////////////////////////////////////////////////////////////");
                                 }
                             }
                         }
                         // lets the user Decide whether they want to select the appointment to add a note then confirm if they still wanted to do it
                         Console.WriteLine("To make a Note on a Specific appointment select the appointment ID to go back press enter:");
                         string selectedid = Console.ReadLine();
-                        Console.WriteLine("type 1 to confirm press enter to go back:");
+                        Console.WriteLine("Type 1 to confirm press enter to go back:");
                         string Userinput = Console.ReadLine();
                         if (Userinput == "1") { }
                         if (Userinput == "") { ManagePatientMenu(); }
@@ -1121,13 +1120,14 @@ namespace DentistManagementSystem
                                 Console.WriteLine("Patients:");
                                 for (int x = 0; x < Patient.Count;x++) 
                                 {
-                                    Console.WriteLine("num: {0}//Name:{1}///Number: {2}///Email: {3}//Adress {4}// Dentist Name: {5}",x, Patient[x].Name1, Patient[x].Number, Patient[x].Email1,Patient[x].Address1,Patient[x].Dentist1.Name);
+                                    Console.WriteLine("Num: {0}//Name:{1}///Number: {2}///Email: {3}//Address {4}// Dentist Name: {5}",x, Patient[x].Name1, Patient[x].Number, Patient[x].Email1,Patient[x].Address1,Patient[x].Dentist1.Name);
                                 }
-                                Console.WriteLine("1. select patient");
-                                Console.WriteLine("2. add patient");
-                                Console.WriteLine("3. delete patient");
-                                Console.WriteLine("4. Change patient Details");
-                                Console.WriteLine("5. select Log out");
+                                Console.WriteLine("1. Select Patient");
+                                Console.WriteLine("2. Add Patient");
+                                Console.WriteLine("3. Delete Patient");
+                                Console.WriteLine("4. Change Patient Details");
+                                Console.WriteLine("5. View All Appointments");
+                                Console.WriteLine("6. Select Log out");
 
                                 //user choice
                                 X = Console.ReadLine();
@@ -1150,6 +1150,10 @@ namespace DentistManagementSystem
                                 }
                                 if (X == "5")
                                 {
+                                    ViewAllAppointments();
+                                }
+                                if (X == "6")
+                                {
                                     LogIn();
                                 }
 
@@ -1157,7 +1161,7 @@ namespace DentistManagementSystem
                             else 
                             {
                                 // if the receptionist is not assined no patients can be a assined to them
-                                Console.WriteLine("you are not assined yet Please try again later");
+                                Console.WriteLine("You are not assined yet please try again later...");
                                 Console.ReadLine();
                                 user = null;
                                 LogIn();
@@ -1184,7 +1188,7 @@ namespace DentistManagementSystem
                         }
                     }
 
-                    Console.WriteLine("select the id of the Patient to select:");
+                    Console.WriteLine("Select the id of the patient to select:");
                     string chosenpatient = Console.ReadLine();//user choses a patient
 
                     for (int x = 0; x < Patient.Count; x++)
@@ -1208,17 +1212,19 @@ namespace DentistManagementSystem
                         {
                             if (selected == Patient[x].Name1) 
                             {
-                                Console.WriteLine("appointments for {0}:", selected);
+                                Console.WriteLine("Appointments for {0}:", selected);
                                 for (int r = 0; r < Patient[x].PatientAppointments.Count; r++) 
                                 {
-                                    Console.WriteLine("id:{0} /// Appointment for a {1} /// Costs: £{2} // with {3} // In room {4}", r, Patient[x].PatientAppointments[r].Treatment1, Patient[x].PatientAppointments[r].Price, Patient[x].PatientAppointments[r].dentist.Name, Patient[x].PatientAppointments[r].room.roomid);
+                                    Console.WriteLine("ID:{0} /// Appointment for a {1} /// Costs: £{2} // With: {3} // In room {4}", r, Patient[x].PatientAppointments[r].Treatment1, Patient[x].PatientAppointments[r].Price, Patient[x].PatientAppointments[r].dentist.Name, Patient[x].PatientAppointments[r].room.roomid);
                                 
                                 }
                             }
                         }
+                        Console.WriteLine();
                         // lets the user Decide whether they want to make a appointment or cancel an Existing one
-                        Console.WriteLine("To make a new appointment type 1:");
-                        Console.WriteLine("To Cancel An existing appointment type 2:");
+                        Console.WriteLine("To make a new appointment type 1");
+                        Console.WriteLine("To Cancel An existing appointment type 2");
+                        Console.WriteLine("To Go back to the Main menu press enter");
                         string UserChoice = Console.ReadLine();
 
                         if (UserChoice == "1") 
@@ -1249,7 +1255,7 @@ namespace DentistManagementSystem
 
                         //User Selects the price
                         Console.WriteLine();
-                        Console.WriteLine("please select a price");
+                        Console.WriteLine("Please select a price:");
                         Console.WriteLine("Band 1 - £22.70 (check-ups, scale and polish etc.)/// Type 3");
                         Console.WriteLine("Band 2 - £62.10 (fillings, repairs etc.)/// Type 2:");
                         Console.WriteLine("Band 3 £269.30 (crowns and other procedures)/// Type 3");
@@ -1276,14 +1282,14 @@ namespace DentistManagementSystem
 
                             if (Dentists[r].hasroom == true)
                             {
-                                Console.WriteLine("/// ID:{0} ///Username: {1}/// name: {2} ///", r, Dentists[r].User, Dentists[r].Name);
+                                Console.WriteLine("/// ID:{0} ///Username: {1}/// Name: {2} ///", r, Dentists[r].User, Dentists[r].Name);
                                 Console.WriteLine();
                             }
                         }
 
                         
                         //user choses the dentist to be assined to the appointment
-                        Console.WriteLine("select the id of the dentist:");
+                        Console.WriteLine("Select the id of the dentist:");
 
                         string chosentDentist = Console.ReadLine();
 
@@ -1316,7 +1322,7 @@ namespace DentistManagementSystem
 
 
                         //user choses the dentist to be assined to the appointment
-                        Console.WriteLine("select the id of the room:");
+                        Console.WriteLine("Select the id of the room:");
 
                         string chosentRoom = Console.ReadLine();
 
@@ -1336,7 +1342,6 @@ namespace DentistManagementSystem
                                             {
                                                 Room = Practices[x].pracRooms[y];
                                                 Patient[r].PatientAppointments.Add(new Appointment(NewTreatment, ChosenBand, AssinedDent, Room));
-                                                //Practices[x].pracRooms[y].PatientAppointments.Add(new Appointment(NewTreatment, ChosenBand, AssinedDent, Room));
                                             }
                                         }
                                     }
@@ -1351,9 +1356,9 @@ namespace DentistManagementSystem
                     void Cancel()
                     {
                         //user choses which user to delete
-                        Console.WriteLine("type the ID of the Appointment being Canceled");
+                        Console.WriteLine("Type the ID of the Appointment being Canceled:");
                         string UserInput = Console.ReadLine();//user sets userinput
-                        Console.WriteLine("press enter to confirm");//confirms the total deletion
+                        Console.WriteLine("Press enter to confirm:");//confirms the total deletion
                         Console.ReadLine();
 
                         //removes the user
@@ -1384,11 +1389,13 @@ namespace DentistManagementSystem
                     Console.WriteLine("Enter the number for the new user");
                     string number = Console.ReadLine();
                     Console.WriteLine();
-                    Console.WriteLine("Enter the Email for the new Patient");
+                    Console.WriteLine("Enter the e-mail for the new Patient");
                     string Email = Console.ReadLine();
-                    Console.WriteLine("Enter the Address for the new Patient");
+                    Console.WriteLine();
+                    Console.WriteLine("Enter the address for the new Patient");
                     string address = Console.ReadLine();
                     //chose there Gender
+                    Console.WriteLine();
                     Console.WriteLine("1 = Male, 2 = Female");
                     string chosenGen = Console.ReadLine();
                     if (chosenGen == "1") 
@@ -1399,6 +1406,7 @@ namespace DentistManagementSystem
                     {
                         Gender = true; //the patient is female
                     }
+                    Console.Clear();
 
                     //displays available Dentists
                     for (x = 0; x < Dentists.Count; x++)
@@ -1413,7 +1421,7 @@ namespace DentistManagementSystem
 
                    
                     //user choses the dentist to be assined to the patient
-                    Console.WriteLine("select the id of the dentist:");
+                    Console.WriteLine("Select the id of the Dentist:");
 
                     string chosentDentist = Console.ReadLine();
 
@@ -1433,9 +1441,9 @@ namespace DentistManagementSystem
                 void DeletePatient()
                 {
                     //user choses which user to delete
-                    Console.WriteLine("type the number of the Patient being deleted");
+                    Console.WriteLine("Type the number of the Patient being deleted:");
                     string UserInput = Console.ReadLine();//user sets userinput
-                    Console.WriteLine("press enter to confirm");//confirms the total deletion
+                    Console.WriteLine("Press enter to confirm:");//confirms the total deletion
                     Console.ReadLine();
 
                     //removes the user
@@ -1452,6 +1460,7 @@ namespace DentistManagementSystem
                 void ChangePatDetails()
                 {
                     //displays all the available Patients
+                    Console.Clear();
                     for (int x = 0; x < Patient.Count; x++)
                     {
                         for (int y = 0; y < Dentists.Count; y++)
@@ -1464,7 +1473,7 @@ namespace DentistManagementSystem
                         }
                     }
 
-                    Console.WriteLine("select the id of the Patient Details that need to be changed:"); 
+                    Console.WriteLine("Select the id of the Patient Details that need to be changed:"); 
 
                     string chosenpatient = Console.ReadLine();//user choses a patient
 
@@ -1477,7 +1486,7 @@ namespace DentistManagementSystem
                                 if(chosenpatient == x.ToString()) 
                                 {
                                     //user choses a Detail to Change
-                                    Console.WriteLine("which detail needs to be changed");
+                                    Console.WriteLine("Which detail needs to be changed:");
                                     Console.WriteLine("1: Email");
                                     Console.WriteLine("2: Phone Number");
                                     Console.WriteLine("3: Address");
@@ -1486,7 +1495,7 @@ namespace DentistManagementSystem
                                     if (chosendetail == "1") 
                                     {
                                         //change Email
-                                        Console.WriteLine("enter the new Email");
+                                        Console.WriteLine("Enter the new e-mail:");
                                         string NewEmail = Console.ReadLine();
                                         Patient[int.Parse(chosenpatient)].Email1 = NewEmail;
                                         ManagePatientMenu();
@@ -1494,7 +1503,7 @@ namespace DentistManagementSystem
                                     if (chosendetail == "2") 
                                     {
                                         //Change Phone Number
-                                        Console.WriteLine("enter the new Phone Number");
+                                        Console.WriteLine("Enter the new Phone Number:");
                                         string NewPhone = Console.ReadLine();
                                         Patient[int.Parse(chosenpatient)].Number = int.Parse(NewPhone);
                                         ManagePatientMenu();
@@ -1502,7 +1511,7 @@ namespace DentistManagementSystem
                                     if (chosendetail == "3")
                                     {
                                         //Change Address
-                                        Console.WriteLine("enter the new Adress");
+                                        Console.WriteLine("Enter the new Adress:");
                                         string Newaddress = Console.ReadLine();
                                         Patient[int.Parse(chosenpatient)].Address1 = (Newaddress);
                                         ManagePatientMenu();
@@ -1513,6 +1522,36 @@ namespace DentistManagementSystem
                         }
                     }
 
+                }
+                void ViewAllAppointments() 
+                {
+                    //viewing all appointments
+                    Console.Clear();
+                    Console.WriteLine("All appointments:");
+                    for(int y = 0; y < receptionists.Count; y++) 
+                    {
+                        for (int x = 0; x < Practices.Count; x++)
+                        {
+                            if (receptionists[y].PracID == Practices[x].PracID) 
+                            {
+                                if (receptionists[y].User == user )
+                                {
+                                    for (int r = 0; r < Patient.Count; r++)
+                                    {
+                                        
+                                        Console.WriteLine("ID:{0}// Patient: {1}//  /// Appointment for a {2} /// Costs: £{3} // With: {4} // In room {5}", r, Patient[r].Name1, Patient[r].PatientAppointments[r].Treatment1, Patient[x].PatientAppointments[r].Price, Patient[r].PatientAppointments[r].dentist.Name, Patient[r].PatientAppointments[r].room.roomid);
+
+                                    }
+
+                                }
+
+                            }
+                        }
+                    }
+                    Console.WriteLine();
+                    Console.WriteLine("Press enter to go back");
+                    Console.ReadLine();
+                    ManagePatientMenu();
                 }
                 ManagePatientMenu();
             }
